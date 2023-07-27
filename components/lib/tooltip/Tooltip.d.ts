@@ -50,6 +50,11 @@ export interface TooltipOptions {
      * @defaultValue 0
      */
     hideDelay?: number | undefined;
+    /**
+     * When present, tooltip would be appended to the element parent instead of document.body.
+     * @defaultValue false
+     */
+    appendToParent?: boolean | undefined;
 }
 
 /**

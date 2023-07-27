@@ -163,7 +163,12 @@ function create(el) {
 
     container.setAttribute('role', 'tooltip');
     container.appendChild(tooltipText);
-    document.body.appendChild(container);
+
+    if (el.$_ptooltipAppendToParent) {
+        getTarget(el).parentElement.appendChild(container);
+    } else {
+        document.body.appendChild(container);
+    }
 
     container.style.display = 'inline-block';
 
@@ -180,7 +185,7 @@ function remove(el) {
 
         if (tooltipElement && tooltipElement.parentElement) {
             ZIndexUtils.clear(tooltipElement);
-            document.body.removeChild(tooltipElement);
+            tooltipElement.parentElement.removeChild(tooltipElement);
         }
 
         el.$_ptooltipId = null;
@@ -358,6 +363,7 @@ const Tooltip = {
             target.$_ptooltipFitContent = true;
             target.$_ptooltipShowDelay = 0;
             target.$_ptooltipHideDelay = 0;
+            target.$_ptooltipAppendToParent = false;
         } else if (typeof options.value === 'object' && options.value) {
             if (ObjectUtils.isEmpty(options.value.value) || options.value.value.trim() === '') return;
             else {
@@ -370,6 +376,7 @@ const Tooltip = {
                 target.$_ptooltipIdAttr = options.value.id || '';
                 target.$_ptooltipShowDelay = options.value.showDelay || 0;
                 target.$_ptooltipHideDelay = options.value.hideDelay || 0;
+                target.$_ptooltipAppendToParent = options.value.appendToParent || false;
             }
         }
 
@@ -403,6 +410,7 @@ const Tooltip = {
             target.$_ptooltipIdAttr = '';
             target.$_ptooltipShowDelay = 0;
             target.$_ptooltipHideDelay = 0;
+            target.$_ptooltipAppendToParent = false;
 
             bindEvents(target);
         } else if (typeof options.value === 'object' && options.value) {
@@ -419,6 +427,7 @@ const Tooltip = {
                 target.$_ptooltipIdAttr = options.value.id || '';
                 target.$_ptooltipShowDelay = options.value.showDelay || 0;
                 target.$_ptooltipHideDelay = options.value.hideDelay || 0;
+                target.$_ptooltipAppendToParent = options.value.appendToParent || false;
 
                 bindEvents(target);
             }
