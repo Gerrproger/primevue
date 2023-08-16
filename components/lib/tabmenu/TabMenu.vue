@@ -74,6 +74,7 @@ export default {
         }
     },
     timeout: null,
+    resizeListener: null,
     data() {
         return {
             d_activeIndex: this.activeIndex
@@ -89,12 +90,14 @@ export default {
     },
     mounted() {
         this.updateInkBar();
+        this.bindResizeListener();
     },
     updated() {
         this.updateInkBar();
     },
     beforeUnmount() {
         clearTimeout(this.timeout);
+        this.unbindResizeListener();
     },
     methods: {
         getPTOptions(key, index) {
@@ -279,6 +282,21 @@ export default {
             if (!inkHighlighted) {
                 this.$refs.inkbar.style.width = '0px';
                 this.$refs.inkbar.style.left = '0px';
+            }
+        },
+        bindResizeListener() {
+            if (!this.resizeListener) {
+                this.resizeListener = () => {
+                    this.updateInkBar();
+                };
+
+                window.addEventListener('resize', this.resizeListener);
+            }
+        },
+        unbindResizeListener() {
+            if (this.resizeListener) {
+                window.removeEventListener('resize', this.resizeListener);
+                this.resizeListener = null;
             }
         }
     },
