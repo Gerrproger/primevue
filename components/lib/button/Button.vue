@@ -1,5 +1,5 @@
 <template>
-    <button v-ripple :class="buttonClass" type="button" :aria-label="defaultAriaLabel" :disabled="disabled" v-bind="ptm('root')">
+    <component :is="isLinkTag ? 'A' : 'BUTTON'" v-ripple :class="buttonClass" :type="isLinkTag ? null : 'button'" :href="isLinkTag ? href : null" :aria-label="defaultAriaLabel" :disabled="isLinkTag ? null : disabled" v-bind="ptm('root')">
         <slot>
             <slot v-if="loading" name="loadingicon" :class="loadingIconStyleClass">
                 <span v-if="loadingIcon" :class="[loadingIconStyleClass, loadingIcon]" v-bind="ptm('loadingIcon')" />
@@ -11,7 +11,7 @@
             <span class="p-button-label" v-bind="ptm('label')">{{ label || '&nbsp;' }}</span>
             <span v-if="badge" :class="badgeStyleClass" v-bind="ptm('badge')">{{ badge }}</span>
         </slot>
-    </button>
+    </component>
 </template>
 
 <script>
@@ -86,6 +86,10 @@ export default {
         plain: {
             type: Boolean,
             default: false
+        },
+        href: {
+            type: String,
+            default: null
         }
     },
     computed: {
@@ -142,6 +146,9 @@ export default {
         },
         hasIcon() {
             return this.icon || this.$slots.icon;
+        },
+        isLinkTag() {
+            return !!this.href;
         }
     },
     components: {

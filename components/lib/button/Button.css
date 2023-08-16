@@ -8,6 +8,12 @@
     text-align: center;
     overflow: hidden;
     position: relative;
+    text-decoration: none;
+}
+
+.p-button:hover,
+.p-button:focus {
+    text-decoration: none;
 }
 
 .p-button-label {
