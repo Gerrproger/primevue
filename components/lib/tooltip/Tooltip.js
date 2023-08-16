@@ -202,7 +202,7 @@ function align(el) {
             alignBottom(el);
 
             if (isOutOfBounds(el)) {
-                alignTop(el);
+                alignTop(el, true);
             }
         }
     } else if (modifiers.left) {
@@ -218,7 +218,7 @@ function align(el) {
                     alignBottom(el);
 
                     if (isOutOfBounds(el)) {
-                        alignLeft(el);
+                        alignLeft(el, true);
                     }
                 }
             }
@@ -230,7 +230,7 @@ function align(el) {
             alignTop(el);
 
             if (isOutOfBounds(el)) {
-                alignBottom(el);
+                alignBottom(el, true);
             }
         }
     } else {
@@ -246,7 +246,7 @@ function align(el) {
                     alignBottom(el);
 
                     if (isOutOfBounds(el)) {
-                        alignRight(el);
+                        alignRight(el, true);
                     }
                 }
             }
@@ -262,48 +262,48 @@ function getHostOffset(el) {
     return { left: targetLeft, top: targetTop };
 }
 
-function alignRight(el) {
+function alignRight(el, final) {
     preAlign(el, 'right');
     let tooltipElement = getTooltipElement(el);
     let hostOffset = getHostOffset(el);
     let left = hostOffset.left + DomHandler.getOuterWidth(el);
     let top = hostOffset.top + (DomHandler.getOuterHeight(el) - DomHandler.getOuterHeight(tooltipElement)) / 2;
 
-    tooltipElement.style.left = left + 'px';
-    tooltipElement.style.top = top + 'px';
+    tooltipElement.style.left = (final && left < 0 ? 0 : left) + 'px';
+    tooltipElement.style.top = (final && top < 0 ? 0 : top) + 'px';
 }
 
-function alignLeft(el) {
+function alignLeft(el, final) {
     preAlign(el, 'left');
     let tooltipElement = getTooltipElement(el);
     let hostOffset = getHostOffset(el);
     let left = hostOffset.left - DomHandler.getOuterWidth(tooltipElement);
     let top = hostOffset.top + (DomHandler.getOuterHeight(el) - DomHandler.getOuterHeight(tooltipElement)) / 2;
 
-    tooltipElement.style.left = left + 'px';
-    tooltipElement.style.top = top + 'px';
+    tooltipElement.style.left = (final && left < 0 ? 0 : left) + 'px';
+    tooltipElement.style.top = (final && top < 0 ? 0 : top) + 'px';
 }
 
-function alignTop(el) {
+function alignTop(el, final) {
     preAlign(el, 'top');
     let tooltipElement = getTooltipElement(el);
     let hostOffset = getHostOffset(el);
     let left = hostOffset.left + (DomHandler.getOuterWidth(el) - DomHandler.getOuterWidth(tooltipElement)) / 2;
     let top = hostOffset.top - DomHandler.getOuterHeight(tooltipElement);
 
-    tooltipElement.style.left = left + 'px';
-    tooltipElement.style.top = top + 'px';
+    tooltipElement.style.left = (final && left < 0 ? 0 : left) + 'px';
+    tooltipElement.style.top = (final && top < 0 ? 0 : top) + 'px';
 }
 
-function alignBottom(el) {
+function alignBottom(el, final) {
     preAlign(el, 'bottom');
     let tooltipElement = getTooltipElement(el);
     let hostOffset = getHostOffset(el);
     let left = hostOffset.left + (DomHandler.getOuterWidth(el) - DomHandler.getOuterWidth(tooltipElement)) / 2;
     let top = hostOffset.top + DomHandler.getOuterHeight(el);
 
-    tooltipElement.style.left = left + 'px';
-    tooltipElement.style.top = top + 'px';
+    tooltipElement.style.left = (final && left < 0 ? 0 : left) + 'px';
+    tooltipElement.style.top = (final && top < 0 ? 0 : top) + 'px';
 }
 
 function preAlign(el, position) {
