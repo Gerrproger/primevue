@@ -138,6 +138,11 @@ export interface ButtonProps extends ButtonHTMLAttributes {
      */
     plain?: boolean | undefined;
     /**
+     * Render button as <a> link tag and add "href" attribute
+     * @defaultValue null
+     */
+    href?: string | undefined;
+    /**
      * Uses to pass attributes to DOM elements inside the component.
      * @type {ButtonPassThroughOptions}
      */
