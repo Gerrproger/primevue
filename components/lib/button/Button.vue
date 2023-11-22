@@ -1,5 +1,5 @@
 <template>
-    <component :is="isLinkTag ? 'A' : 'BUTTON'" v-ripple :class="buttonClass" :type="isLinkTag ? null : 'button'" :href="isLinkTag ? href : null" :aria-label="defaultAriaLabel" :disabled="isLinkTag ? null : disabled" v-bind="ptm('root')">
+    <component :is="computedTag" v-ripple :class="buttonClass" :type="to || href ? null : 'button'" :href="to || href || null" :aria-label="defaultAriaLabel" :disabled="to || href ? null : disabled" v-bind="ptm('root')">
         <slot>
             <slot v-if="loading" name="loadingicon" :class="loadingIconStyleClass">
                 <span v-if="loadingIcon" :class="[loadingIconStyleClass, loadingIcon]" v-bind="ptm('loadingIcon')" />
@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import { resolveComponent } from 'vue';
 import BaseComponent from 'primevue/basecomponent';
 import SpinnerIcon from 'primevue/icons/spinner';
 import Ripple from 'primevue/ripple';
@@ -90,6 +91,10 @@ export default {
         href: {
             type: String,
             default: null
+        },
+        to: {
+            type: String,
+            default: null
         }
     },
     computed: {
@@ -113,6 +118,17 @@ export default {
                     'p-button-plain': this.plain
                 }
             ];
+        },
+        computedTag() {
+            if (this.to && this.$nuxt) {
+                return resolveComponent('nuxt-link');
+            }
+
+            if (this.href) {
+                return 'A';
+            }
+
+            return 'BUTTON';
         },
         iconStyleClass() {
             return [
