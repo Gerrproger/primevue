@@ -143,6 +143,11 @@ export interface ButtonProps extends ButtonHTMLAttributes {
      */
     href?: string | undefined;
     /**
+     * Render button as <NuxtLink> component and pass 'to' parameter
+     * @defaultValue null
+     */
+    to?: string | undefined;
+    /**
      * Uses to pass attributes to DOM elements inside the component.
      * @type {ButtonPassThroughOptions}
      */
