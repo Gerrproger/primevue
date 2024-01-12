@@ -776,12 +776,18 @@ export default {
             }
 
             data.sort((data1, data2) => {
-                let value1 = lookupMap.get(data1);
-                let value2 = lookupMap.get(data2);
+                const value1 = lookupMap.get(data1);
+                const value2 = lookupMap.get(data2);
 
                 let result = null;
 
-                if (value1 == null && value2 != null) result = -1;
+                const emptyValue1 = ObjectUtils.isEmpty(value1);
+                const emptyValue2 = ObjectUtils.isEmpty(value2);
+
+                if (emptyValue1 && emptyValue2) result = 0;
+                else if (emptyValue1) result = 1 * this.d_sortOrder;
+                else if (emptyValue2) result = -1 * this.d_sortOrder;
+                else if (value1 == null && value2 != null) result = -1;
                 else if (value1 != null && value2 == null) result = 1;
                 else if (value1 == null && value2 == null) result = 0;
                 else if (typeof value1 === 'string' && typeof value2 === 'string') result = stringCompare(value1, value2);
@@ -818,7 +824,13 @@ export default {
             const value2 = ObjectUtils.resolveFieldData(data2, this.d_multiSortMeta[index].field);
             let result = null;
 
-            if (typeof value1 === 'string' || value1 instanceof String) {
+            const emptyValue1 = ObjectUtils.isEmpty(value1);
+            const emptyValue2 = ObjectUtils.isEmpty(value2);
+
+            if (emptyValue1 && emptyValue2) result = 0;
+            else if (emptyValue1) result = 1 * this.d_multiSortMeta[index].order;
+            else if (emptyValue2) result = -1 * this.d_multiSortMeta[index].order;
+            else if (typeof value1 === 'string' || value1 instanceof String) {
                 if (value1.localeCompare && value1 !== value2) {
                     return this.d_multiSortMeta[index].order * value1.localeCompare(value2, undefined, { numeric: true });
                 }
