@@ -938,10 +938,10 @@ export interface DataTableProps {
      */
     expandedRowGroups?: any[] | DataTableExpandedRows;
     /**
-     * Defines where a stateful table keeps its state.
+     * Defines where a stateful table keeps its state ('session', 'local' or custom function).
      * @defaultValue session
      */
-    stateStorage?: 'session' | 'local' | undefined;
+    stateStorage?: 'session' | 'local' | { setItem: (key: string, value: string) => void; getItem: (key: string) => string | undefined } | undefined;
     /**
      * Unique identifier of a stateful table to use in state storage.
      */

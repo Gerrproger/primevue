@@ -504,7 +504,7 @@ export default {
             default: null
         },
         stateStorage: {
-            type: String,
+            type: [String, Object],
             default: 'session'
         },
         stateKey: {
@@ -650,7 +650,7 @@ export default {
             }
         }
     },
-    beforeMount() {
+    created() {
         if (this.isStateful()) {
             this.restoreState();
         }
@@ -1856,9 +1856,13 @@ export default {
             return false;
         },
         isStateful() {
-            return this.stateKey != null;
+            return this.stateKey != null || (typeof this.stateStorage === 'object' && 'getItem' in this.stateStorage && 'setItem' in this.stateStorage);
         },
         getStorage() {
+            if (typeof this.stateStorage === 'object' && 'getItem' in this.stateStorage && 'setItem' in this.stateStorage) {
+                return this.stateStorage;
+            }
+
             switch (this.stateStorage) {
                 case 'local':
                     return window.localStorage;
@@ -1867,7 +1871,7 @@ export default {
                     return window.sessionStorage;
 
                 default:
-                    throw new Error(this.stateStorage + ' is not a valid value for the state storage, supported values are "local" and "session".');
+                    throw new Error(this.stateStorage + ' is not a valid value for the state storage, supported values are "local" and "session" or custom function.');
             }
         },
         saveState() {
